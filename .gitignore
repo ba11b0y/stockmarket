@@ -55,6 +55,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 venvstockmarket/
+.idea/
 
 # Flask stuff:
 instance/

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Your stocks</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<h1> HI {{ user.username }}</h1>
+<h3>Here are your stocks</h3>
+<ul class="list-group">
+    <script type="text/javascript">
+    var total_bal = "{{ user.total_fund }}";
+    </script>
+    {% for stock in user.stocks.all %}
+        <li class="list-group-item">
+            <b>{{ stock.stock_name  }}</b>
+            <p id="curr">Current price : {{ stock.current_price }}</p>
+            Bought at : {{ stock.buy_price }}
+            <button class="btn" id="buy{{ stock.stock_name }}" data-toggle="modal" data-target="#buy-modal-{{ stock.stock_name }}">Buy</button>
+            <!--Modal for buy-->
+            <div id="buy-modal-{{ stock.stock_name }}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Buy {{ stock.stock_name }}</h4>
+                      </div>
+                      <div class="modal-body">
+                          <form method="post" action="{% url 'buy' pk=user.id sn=stock.stock_name %}" >
+                              {% csrf_token %}
+                                  {% if next %}
+                          <input type="hidden" name="next" value="{{ next }}" />
+                          {% endif %}
+                            <label for="quantity">Quantity</label>
+                            <input type="number" id="quantity-buy" name="quantity-{{ stock.stock_name }}">
+                            <button class="btn" id="confirm-buy" type="submit" >Buy</button>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="btn" id="sell{{ stock.stock_name }}" data-toggle="modal" data-target="#sell-modal-{{ stock.stock_name }}">Sell</button>
+                    <!--Modal for sell-->
+            <div id="sell-modal-{{ stock.stock_name }}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Sell {{ stock.stock_name }}</h4>
+      </div>
+      <div class="modal-body">
+          <form method="post" action="{% url 'sell' pk=user.id sn=stock.stock_name %}" >
+              {% csrf_token %}
+                  {% if next %}
+          <input type="hidden" name="next" value="{{ next }}" />
+          {% endif %}
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity-buy" name="quantity-{{ stock.stock_name }}">
+            <button class="btn" id="confirm-sell" type="submit" >Sell</button>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+        </li>
+
+    {% endfor %}
+    <h3>Total Balance : {{ user.total_fund }}</h3>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button>LOGOUT</button>
+    </form>
+</ul>
+</body>
+</html>
+<script type="text/javascript">
+
+    $("#confirm-sell").click(function ({{ stock.stock_name }}) {
+        var quantity = $("#quantity-sell").value;
+        var curr_price = $("#curr").value;
+        total_bal+= quantity*curr_price;
+        location.reload(true);
+    })
+</script>
