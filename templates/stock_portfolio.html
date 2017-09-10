@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                                                                                                                                                                                                                                                                                                                                                        <!DOCTYPE html>
 <html lang="en">
 <head>
   <title>Your stocks</title>
@@ -15,29 +15,33 @@
     <script type="text/javascript">
     var total_bal = "{{ user.total_fund }}";
     </script>
+    <h3 style="color: red">{{ err }}</h3>
     {% for stock in user.stocks.all %}
         <li class="list-group-item">
-            <b>{{ stock.stock_name  }}</b>
+            <b>{{ stock.name  }}</b>
             <p id="curr">Current price : {{ stock.current_price }}</p>
-            Bought at : {{ stock.buy_price }}
-            <button class="btn" id="buy{{ stock.stock_name }}" data-toggle="modal" data-target="#buy-modal-{{ stock.stock_name }}">Buy</button>
+            <b>Recent purchase</b>
+            Quantity: {{ stock.buy_data_set.all.0.quantity|last }}<br>
+            Bought at : {{ stock.buy_data_set.all.0.price|last }}<br>
+            Average buying price is {{ stock.buy_data_set.all.0.average_price }}
+            <button class="btn" id="buy{{ stock.name }}" data-toggle="modal" data-target="#buy-modal-{{ stock.name }}">Buy</button>
             <!--Modal for buy-->
-            <div id="buy-modal-{{ stock.stock_name }}" class="modal fade" role="dialog">
+            <div id="buy-modal-{{ stock.name }}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Buy {{ stock.stock_name }}</h4>
+                        <h4 class="modal-title">Buy {{ stock.name }}</h4>
                       </div>
                       <div class="modal-body">
-                          <form method="post" action="{% url 'buy' pk=user.id sn=stock.stock_name %}" >
+                          <form method="post" action="{% url 'buy' pk=user.id sn=stock.name %}" >
                               {% csrf_token %}
                                   {% if next %}
                           <input type="hidden" name="next" value="{{ next }}" />
                           {% endif %}
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity-buy" name="quantity-{{ stock.stock_name }}">
+                            <input type="number" id="quantity-buy" name="quantity-{{ stock.name }}">
                             <button class="btn" id="confirm-buy" type="submit" >Buy</button>
                           </form>
                       </div>
@@ -48,25 +52,25 @@
 
                 </div>
             </div>
-            <button class="btn" id="sell{{ stock.stock_name }}" data-toggle="modal" data-target="#sell-modal-{{ stock.stock_name }}">Sell</button>
+            <button class="btn" id="sell{{ stock.name }}" data-toggle="modal" data-target="#sell-modal-{{ stock.name }}">Sell</button>
                     <!--Modal for sell-->
-            <div id="sell-modal-{{ stock.stock_name }}" class="modal fade" role="dialog">
+            <div id="sell-modal-{{ stock.name }}" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Sell {{ stock.stock_name }}</h4>
+        <h4 class="modal-title">Sell {{ stock.name }}</h4>
       </div>
       <div class="modal-body">
-          <form method="post" action="{% url 'sell' pk=user.id sn=stock.stock_name %}" >
+          <form method="post" action="{% url 'sell' pk=user.id sn=stock.name %}" >
               {% csrf_token %}
                   {% if next %}
           <input type="hidden" name="next" value="{{ next }}" />
           {% endif %}
             <label for="quantity">Quantity</label>
-            <input type="number" id="quantity-buy" name="quantity-{{ stock.stock_name }}">
+            <input type="number" id="quantity-sell" name="quantity-{{ stock.name }}">
             <button class="btn" id="confirm-sell" type="submit" >Sell</button>
           </form>
       </div>
@@ -77,7 +81,6 @@
 
   </div>
 </div>
-        </li>
 
     {% endfor %}
     <h3>Total Balance : {{ user.total_fund }}</h3>
@@ -88,12 +91,3 @@
 </ul>
 </body>
 </html>
-<script type="text/javascript">
-
-    $("#confirm-sell").click(function ({{ stock.stock_name }}) {
-        var quantity = $("#quantity-sell").value;
-        var curr_price = $("#curr").value;
-        total_bal+= quantity*curr_price;
-        location.reload(true);
-    })
-</script>
