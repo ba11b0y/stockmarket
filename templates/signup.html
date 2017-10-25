@@ -2,41 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
     <title>SIGNUP</title>
 </head>
-<body>
-
-<div class="signup">
-    <form class="form-horizontal" name="SignupForm" action="{% url 'signup' %}" method="post">
-    {% csrf_token %}
-    {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" />
-    {% endif %}
-    <div class="control-group">
-    <label class="control-label" for="username">Username</label>
-        <div class="controls">
-            <input type="text" id="username" name="username" placeholder="Username">
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="password">Password</label>
-            <div class="controls">
-                <input type="password" name="password" id="password" placeholder="Password">
-            </div>
-    </div>
-    <div class="control-group">
-    <label class="control-label" for="confirm_password">Confirm password</label>
-        <div class="controls">
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Password again..">
-        </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn">Signup</button>
-        </div>
-    </div>
-    </form>
+<body style="background-color:  #ff704d">
+{#<div class="signup">#}
+{#    <form class="form-horizontal" name="SignupForm" action="{% url 'signup' %}" method="post">#}
+{#    {% csrf_token %}#}
+{#    {% if next %}#}
+{#        <input type="hidden" name="next" value="{{ next }}" />#}
+{#    {% endif %}#}
+{#    <div class="control-group">#}
+{#    <label class="control-label" for="username">Username</label>#}
+{#        <div class="controls">#}
+{#            <input type="text" id="username" name="username" placeholder="Username">#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="control-group">#}
+{#        <label class="control-label" for="password">Password</label>#}
+{#            <div class="controls">#}
+{#                <input type="password" name="password" id="password" placeholder="Password">#}
+{#            </div>#}
+{#    </div>#}
+{#    <div class="control-group">#}
+{#    <label class="control-label" for="confirm_password">Confirm password</label>#}
+{#        <div class="controls">#}
+{#            <input type="password" name="confirm_password" id="confirm_password" placeholder="Password again..">#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="control-group">#}
+{#        <div class="controls">#}
+{#            <button type="submit" class="btn">Signup</button>#}
+{#        </div>#}
+{#    </div>#}
+{#    </form>#}
+{#</div>#}
+<div class="container" style="text-align: center;margin-left: 40%;margin-top: 10%;color: white;font-family: 'Lato', sans-serif;">
+<div class="container" >
+    <div class="row">
+		<div class="span12">
+			<form class="form-horizontal" action="{% url 'signup' %}" method="POST">
+                {% csrf_token %}
+			  <fieldset>
+			    <div id="legend">
+			      <legend class="center" style="font-size: xx-large;font-weight: 200;font-family: 'Lato', sans-serif;">SignUp</legend>
+			    </div>
+			    <div class="control-group">
+			      <!-- Username -->
+			      <label class="control-label"  for="username" style="font-family: 'Lato', sans-serif;border-width: thin;">Username</label>
+			      <div class="controls">
+			        <input type="text" id="username" name="username" placeholder="Username" class="form-control" style="border-width: thick;border-color: whitesmoke">
+			      </div>
+			    </div>
+			    <div class="control-group">
+			      <!-- Password-->
+			      <label class="control-label" for="password" style="font-family: 'Lato', sans-serif;">Password</label>
+			      <div class="controls">
+			        <input type="password" id="password" name="password" placeholder="Password" class="form-control" style="border-width: thick;border-color: whitesmoke">
+			      </div>
+			    </div>
+                  <div class="control-group">
+			      <!-- Password-->
+			      <label class="control-label" for="confirm_password" style="font-family: 'Lato', sans-serif;">Confirm your Password</label>
+			      <div class="controls">
+			        <input type="password" id="password" name="confirm_password" placeholder="Password again!" class="form-control" style="border-width: thick;border-color: whitesmoke">
+			      </div>
+			    </div>
+			    <div class="control-group">
+			      <!-- Button -->
+			      <div class="controls">
+			        <button class="btn btn-success" type="submit" style="margin-top: 10%">Signup</button>
+			      </div>
+			    </div>
+			  </fieldset>
+			</form>
+		</div>
+	</div>
 </div>
-
+</div>
 </body>
 </html>

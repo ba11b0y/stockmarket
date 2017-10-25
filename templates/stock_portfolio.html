@@ -6,12 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script
+  src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"
+  integrity="sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE="
+  crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
+
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
-<h1> HI {{ user.username }}</h1>
-<h3>Here are your stocks</h3>
-<ul class="list-group">
+<body style="background-color:  #ff704d">
+<div class="container">
+    <div class="jumbotron" style="text-align: center;background-color: #ff704d;color: white;font-family: 'Lato', sans-serif;">
+<h1> Hi {{ user.username }}</h1>
+<h3>Here is your stock portfolio!</h3>
+    </div>
+</div>
+<ul class="list-group" style="text-align: center">
     <script type="text/javascript">
     var total_bal = "{{ user.total_fund }}";
     </script>
@@ -19,12 +29,13 @@
     {% for stock in user.stocks.all %}
         <li class="list-group-item">
             <b>{{ stock.name  }}</b>
-            <p id="curr">Current price : {{ stock.current_price }}</p>
-            <b>Recent purchase</b>
-            Quantity: {{ stock.buy_data_set.all.0.quantity|last }}<br>
-            Bought at : {{ stock.buy_data_set.all.0.price|last }}<br>
-            Average buying price is {{ stock.buy_data_set.all.0.average_price }}
-            <button class="btn" id="buy{{ stock.name }}" data-toggle="modal" data-target="#buy-modal-{{ stock.name }}">Buy</button>
+            <p id="curr" style="font-family: 'Lato', sans-serif;">Current price as in NSE: {{ stock.current_price }}</p>
+            <b style="font-family: 'Lato', sans-serif;">Recent purchase</b><br>
+        <p style="font-family: 'Lato', sans-serif;">Quantity: {{ stock.buy_data_set.all.0.quantity|last }}</p><br>
+        <p style="font-family: 'Lato', sans-serif;">Bought at : {{ stock.buy_data_set.all.0.price|last }}</p><br>
+        <p style="font-family: 'Lato', sans-serif;">Average buy price is {{ stock.buy_data_set.all.0.average_price }}</p><br>
+        <div class="container">
+            <button class="btn" id="buy{{ stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#buy-modal-{{ stock.name }}">Buy</button>
             <!--Modal for buy-->
             <div id="buy-modal-{{ stock.name }}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -52,7 +63,7 @@
 
                 </div>
             </div>
-            <button class="btn" id="sell{{ stock.name }}" data-toggle="modal" data-target="#sell-modal-{{ stock.name }}">Sell</button>
+            <button class="btn" id="sell{{ stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#sell-modal-{{ stock.name }}">Sell</button>
                     <!--Modal for sell-->
             <div id="sell-modal-{{ stock.name }}" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -81,12 +92,14 @@
 
   </div>
 </div>
+        </div>
+
 
     {% endfor %}
-    <h3>Total Balance : {{ user.total_fund }}</h3>
+    <h3 style="color: #FF704D">Total Balance : {{ user.total_fund }}</h3>
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button>LOGOUT</button>
+        <button class="btn" style="align-self: center;background-color: #ff704d;color: white;">LOGOUT</button>
     </form>
 </ul>
 </body>
