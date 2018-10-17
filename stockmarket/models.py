@@ -1,41 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
 class Stock(models.Model):
 
     name = models.CharField(max_length=10)
-    current_price = models.FloatField(default=0)
+    ltp = models.FloatField()
     def __str__(self):
         return self.name
 
 class CustomUser(AbstractUser):
-    stocks = models.ManyToManyField(Stock)
     total_fund = models.FloatField(default=500000.0)
     def __str__(self):
         return self.username
 
-class Buy_Data(models.Model):
+class Order(models.Model):
+
+    trader = models.ForeignKey(CustomUser, related_name='orders')
     stock = models.ForeignKey(Stock)
-    user = models.ForeignKey(CustomUser)
-    price = ArrayField(models.FloatField(default=0.0))
-    quantity = ArrayField(models.IntegerField(default=0))
-    average_price = models.FloatField(default=0.0)
-    def get_average_price(self):
-        tprice=0
-        for i in range(len(self.price)):
-            tprice+=(self.quantity[i]*self.price[i])
-        quantity = sum(self.quantity)
-        if quantity==0:
-            avg = 0
-            return avg
-        avg = round(tprice/quantity,2)
-        return avg
+    order_type = models.CharField(max_length=4)
+    quantity = models.IntegerField()
+    amount = models.FloatField()
 
     def __str__(self):
-        return self.user.username+ " bought "+self.stock.name
+        return self.trader.username+" - "+self._type
 
-
+    def save(self, *args, **kwargs):
+        amount = self.stock.ltp*self.quantity
+        self.amount = amount
+        super(Order, self).save(*args, **kwargs)
 

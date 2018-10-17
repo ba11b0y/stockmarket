@@ -16,9 +16,18 @@
 </head>
 <body style="background-color:  #ff704d">
 <div class="container">
-    <div class="jumbotron" style="text-align: center;background-color: #ff704d;color: white;font-family: 'Lato', sans-serif;">
+    <div class="jumbotron" style="text-align: center;background-color: #ff704d;font-family: 'Lato', sans-serif;">
+
+      
 <h1> Hi {{ user.username }}</h1>
 <h3>Here is your stock portfolio!</h3>
+<form action="" method="GET">
+  {% csrf_token%}
+  {{form.as_p}}
+<!-- Place Order:<input type="text" name="stock_auto" style="text-emphasis-color: black"> -->
+</form>
+{{ form.media }}
+
     </div>
 </div>
 <ul class="list-group" style="text-align: center">
@@ -26,33 +35,32 @@
     var total_bal = "{{ user.total_fund }}";
     </script>
     <h3 style="color: red">{{ err }}</h3>
-    {% for stock in user.stocks.all %}
+    {% for order in orders %}
         <li class="list-group-item">
-            <b>{{ stock.name  }}</b>
-            <p id="curr" style="font-family: 'Lato', sans-serif;">Current price as in NSE: {{ stock.current_price }}</p>
-            <b style="font-family: 'Lato', sans-serif;">Recent purchase</b><br>
-        <p style="font-family: 'Lato', sans-serif;">Quantity: {{ stock.buy_data_set.all.0.quantity|last }}</p><br>
-        <p style="font-family: 'Lato', sans-serif;">Bought at : {{ stock.buy_data_set.all.0.price|last }}</p><br>
-        <p style="font-family: 'Lato', sans-serif;">Average buy price is {{ stock.buy_data_set.all.0.average_price }}</p><br>
+            <b>{{ order.stock.name  }}</b>
+            <p id="curr" style="font-family: 'Lato', sans-serif;">Current price as in NSE: {{ order.stock.ltp }}</p>
+            <b style="font-family: 'Lato', sans-serif;">Recent {{order.order_type}} Order</b><br>
+        <p style="font-family: 'Lato', sans-serif;">Quantity: {{ order.quantity }}</p><br>
+        <p style="font-family: 'Lato', sans-serif;">Bought at : {{ order.stock.ltp }}</p><br>
         <div class="container">
-            <button class="btn" id="buy{{ stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#buy-modal-{{ stock.name }}">Buy</button>
+            <button class="btn" id="buy{{ order.stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#buy-modal-{{ order.stock.name }}">Buy</button>
             <!--Modal for buy-->
-            <div id="buy-modal-{{ stock.name }}" class="modal fade" role="dialog">
+            <div id="buy-modal-{{ order.stock.name }}" class="modal fade" role="dialog">
                 <div class="modal-dialog">
                     <!-- Modal content-->
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Buy {{ stock.name }}</h4>
+                        <h4 class="modal-title">Buy {{ order.stock.name }}</h4>
                       </div>
                       <div class="modal-body">
-                          <form method="post" action="{% url 'buy' pk=user.id sn=stock.name %}" >
+                          <form method="post" action="{% url 'buy' pk=user.id sn=order.stock.name %}" >
                               {% csrf_token %}
                                   {% if next %}
                           <input type="hidden" name="next" value="{{ next }}" />
                           {% endif %}
                             <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity-buy" name="quantity-{{ stock.name }}">
+                            <input type="number" id="quantity-buy" name="quantity-{{ order.stock.name }}">
                             <button class="btn" id="confirm-buy" type="submit" >Buy</button>
                           </form>
                       </div>
@@ -63,25 +71,25 @@
 
                 </div>
             </div>
-            <button class="btn" id="sell{{ stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#sell-modal-{{ stock.name }}">Sell</button>
+            <button class="btn" id="sell{{ order.stock.name }}" style="background-color: #ff704d;color: white;" data-toggle="modal" data-target="#sell-modal-{{ order.stock.name }}">Sell</button>
                     <!--Modal for sell-->
-            <div id="sell-modal-{{ stock.name }}" class="modal fade" role="dialog">
+            <div id="sell-modal-{{ order.stock.name }}" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Sell {{ stock.name }}</h4>
+        <h4 class="modal-title">Sell {{ order.stock.name }}</h4>
       </div>
       <div class="modal-body">
-          <form method="post" action="{% url 'sell' pk=user.id sn=stock.name %}" >
+          <form method="post" action="{% url 'sell' pk=user.id sn=order.stock.name %}" >
               {% csrf_token %}
                   {% if next %}
           <input type="hidden" name="next" value="{{ next }}" />
           {% endif %}
             <label for="quantity">Quantity</label>
-            <input type="number" id="quantity-sell" name="quantity-{{ stock.name }}">
+            <input type="number" id="quantity-sell" name="quantity-{{ order.stock.name }}">
             <button class="btn" id="confirm-sell" type="submit" >Sell</button>
           </form>
       </div>

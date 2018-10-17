@@ -32,12 +32,15 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'dal',
+    'dal_select2',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stockmarket',
+    
 ]
 
 MIDDLEWARE = [
@@ -82,15 +85,23 @@ WSGI_APPLICATION = 'DBMS_PROJECT.wsgi.application'
 # }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stockmarketdb',
-        'USER': 'rahul',
-        'PASSWORD': 'rahul786',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db',
     }
 }
 
+# NEO4J_DATABASES = {
+#     'default' : {
+#         'HOST':'tomchi:tomchi123@https://35.202.60.140',
+#         'PORT':7473,
+#         'ENDPOINT':'/db/data',
+#     }
+# }
+
+
+# AUTHENTICATION_BACKENDS = ('neo4django.graph_auth.backends.NodeModelBackend',)
+
+# DATABASE_ROUTERS = ['neo4django.utils.Neo4djangoIntegrationRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
